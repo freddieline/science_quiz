@@ -3,13 +3,16 @@ import alt from '../alt';
 class TodoActions {
     constructor() {
         this.generateActions(
-            'create',
-            'toggleComplete',
+            'createAnswer',
+            'saveCorrectAnswer',
             'saveComplete',
-            'areAnyComplete',
+            'correctAnswerProvided',
             'createQuestion',
             'clearQuestion',
-            'clearAnswers'
+            'clearAnswers',
+            'deleteQuestion',
+            'moveQuestionUp',
+            'moveQuestionDown'
         )
     }
 }

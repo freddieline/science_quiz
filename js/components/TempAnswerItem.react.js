@@ -7,29 +7,27 @@ import TodoActions from '../actions/TodoActions';
 class TodoItem extends React.Component {
     constructor(props) {
         super(props)
-        this._onToggleComplete = this._onToggleComplete.bind(this);
+        this._onSaveCorrectAnswer = this._onSaveCorrectAnswer.bind(this);
     }
 
     render() {
 
-
-        console.dir("todo props"+this.props);
         const { answer } = this.props;
 
         return (
-            <li className={ classNames({ 'complete': answer.complete }) }>
+            <li className={ classNames({ 'complete': answer.correct }) }>
                 <input
                     type="checkbox"
-                    checked={ answer.complete } 
-                    onChange={ this._onToggleComplete }
+                    checked={ answer.correct } 
+                    onChange={ this._onSaveCorrectAnswer }
                 /> 
                 { answer.text }
             </li>
         );
     }
 
-    _onToggleComplete() {
-        TodoActions.toggleComplete(this.props.answer.id); 
+    _onSaveCorrectAnswer() {
+        TodoActions.saveCorrectAnswer(this.props.answer.id); 
     }
 };
 

@@ -10,7 +10,6 @@ class MainSection extends React.Component {
         let answers = [];
 
         for (let key in allAnswers) {
-            console.log("MM"+allAnswers[key].text );
             answers.push(<TempAnswerItem key={ key } answer={ allAnswers[key] } />);
         }
 

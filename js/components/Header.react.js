@@ -14,15 +14,15 @@ class Header extends React.Component {
                 />
                 <h1>Answers</h1>
                 <AnswersInput
-                    onSave={ this.onSave } 
+                    onSave={ this.onCreateAnswer } 
                 />
 
             </div>
         );
     }
 
-    onSave(newTodo) {
-        TodoActions.create(newTodo);
+    onCreateAnswer(newTodo) {
+        TodoActions.createAnswer(newTodo);
     }
 
     onCreateQuestion(newTodo) {

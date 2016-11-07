@@ -10,7 +10,7 @@ import Footer from './Footer.react';
 function getTodoState() {
     return {
         allAnswers: TodoStore.getState().answers,
-        areAnyComplete: TodoStore.areAnyComplete(),
+        correctAnswerProvided: TodoStore.correctAnswerProvided(),
         question: TodoStore.getState().question,
         savedQuestionsAndAnswers:TodoStore.getState().questionsAndAnswers
     }
@@ -33,19 +33,13 @@ class TodoApp extends React.Component {
 
     render() {
 
-        for (let key in this.state.savedQuestionsAndAnswers) {
-            console.dir("App key"+key);
-            console.dir("App"+this.state.savedQuestionsAndAnswers[key].answers );
-        }
-
-
         return (
             <div className="container">
                 <Header />
                 <MainSection answers={this.state.allAnswers } 
                               question={this.state.question } 
                 />
-                <Footer areAnyComplete={this.state.areAnyComplete } />
+                <Footer correctAnswerProvided={this.state.correctAnswerProvided } />
                 <SavedSection qAndAs={this.state.savedQuestionsAndAnswers}
 
                  />

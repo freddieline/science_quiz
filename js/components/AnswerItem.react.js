@@ -14,9 +14,11 @@ class AnswerItem extends React.Component {
 
         const {answer} = this.props
 
-        console.dir("A item"+answer)
         return (
             <li>
+                <input type="checkbox" 
+                checked={ answer.correct } 
+                />
                 {answer.text}
             </li>
         );

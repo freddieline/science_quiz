@@ -42,7 +42,7 @@ class Footer extends React.Component {
     }
 
     _clearQuestion(){
-        console.log('clear qeustion');
+    
         TodoActions.clearQuestion();
     }
 

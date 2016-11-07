@@ -6,17 +6,17 @@ import TodoActions from '../actions/TodoActions';
 class TodoStore {
     constructor() {
         this.bindActions(TodoActions);
-
         this.answers = {};
         this.question = {};
         this.questionsAndAnswers = {};
+        this.questionNumber=1;
     }
 
     update(id, update) {
         this.answers[id] = merge(this.answers[id], update);
     }
 
-    onCreate(text) {
+    onCreateAnswer(text) {
 
         text = text.trim()
         if (text === '') {
@@ -26,43 +26,45 @@ class TodoStore {
         const id = (+new Date() + Math.floor(Math.random() * 999999)).toString(36);
         this.answers[id] = {
             id: id,
-            complete: false,
+            correct: false,
             text: text
         }
     }
 
-    onToggleComplete(id) {
-        const complete = !this.answers[id].complete;
-        this.update(id, { complete });
+    onSaveCorrectAnswer(id) {
+        const correct = !this.answers[id].correct;
+        this.update(id, { correct });
     }
 
     onSaveComplete() {
         
-        var ans={};
-
+        console.log('save');
+        var ans={};        
         for(let id in this.answers) {
-            console.log("astore a "+this.answers[id].text);
             ans[id] = this.answers[id];    
         };
-
         this.answers ={};
 
         var currentQuestionAndAnswer = {
             question: this.question.text,
             answers:ans
         };
-        var key = this.question.id;
         
-        this.questionsAndAnswers[key] = currentQuestionAndAnswer;
+        var qNum = this.questionNumber;
+        this.questionsAndAnswers[qNum] = currentQuestionAndAnswer;
 
+        var qAArray = this.questionsAndAnswers;
+        var index = Object.keys(qAArray).length;
+   
+        currentQuestionAndAnswer["order"]= index;
 
-        console.dir("astore q "+currentQuestionAndAnswer.question);
-        console.dir("astore "+this.questionsAndAnswers[key]);
+        this.questionsAndAnswers[qNum] = merge(this.questionsAndAnswers[qNum], currentQuestionAndAnswer);
+        this.questionNumber+=1;
         this.question = {};
 
     }
 
-    static areAnyComplete() {
+    static correctAnswerProvided() {
         const { answers } = this.getState();
 
         for(let id in answers) {
@@ -82,24 +84,34 @@ class TodoStore {
         // hand waving of course.
         const id = (+new Date() + Math.floor(Math.random() * 999999)).toString(36);
         this.question ={
-            text:text,
-            id:id
+            text:text
         }
- 
-        console.log("question"+this.question.text);
     }
 
     onClearQuestion() {
-
         this.question = '';
     }
 
     onClearAnswers() {
-
-
         for(let id in this.answers) {
             delete this.answers[id];
         };
+    }
+
+    onDeleteQuestion(key){
+        delete this.questionsAndAnswers[key];
+    }
+
+    onMoveQuestionUp(keyPair){
+        console.log('up');
+        this.questionsAndAnswers[keyPair.thisKey].order = this.questionsAndAnswers[keyPair.thisKey].order -1;
+        this.questionsAndAnswers[keyPair.previousKey].order = this.questionsAndAnswers[keyPair.previousKey].order +1;
+    }
+
+    onMoveQuestionDown(keyPair){
+        console.log('down');
+        this.questionsAndAnswers[keyPair.thisKey].order = this.questionsAndAnswers[keyPair.thisKey].order +1;
+        this.questionsAndAnswers[keyPair.nextKey].order = this.questionsAndAnswers[keyPair.nextKey].order -1;
     }
 
 

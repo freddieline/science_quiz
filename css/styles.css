@@ -17,3 +17,12 @@ li span {
   text-decoration: line-through;
   color: #999;
 }
+
+.btn-primary{
+  margin-right:20px;
+  display:inline-block;
+
+  &.hide{
+    display:none;
+  }
+}
