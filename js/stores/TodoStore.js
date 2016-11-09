@@ -9,7 +9,11 @@ class TodoStore {
         this.answers = {};
         this.question = {};
         this.questionsAndAnswers = {};
-        this.questionNumber=1;
+        this.numberOfQuestions=0;
+        this.showEditable=true;
+        this.finished=false;
+        this.score=0;
+        this.incorrectAnswers = {};
     }
 
     update(id, update) {
@@ -27,7 +31,8 @@ class TodoStore {
         this.answers[id] = {
             id: id,
             correct: false,
-            text: text
+            text: text,
+            chosen:false
         }
     }
 
@@ -37,6 +42,7 @@ class TodoStore {
     }
 
     onSaveComplete() {
+        this.numberOfQuestions+=1;
         
         console.log('save');
         var ans={};        
@@ -50,16 +56,14 @@ class TodoStore {
             answers:ans
         };
         
-        var qNum = this.questionNumber;
-        this.questionsAndAnswers[qNum] = currentQuestionAndAnswer;
+        console.log("type del"+typeof this.numberOfQuestions);
+        this.questionsAndAnswers[this.numberOfQuestions] = currentQuestionAndAnswer;
 
         var qAArray = this.questionsAndAnswers;
-        var index = Object.keys(qAArray).length;
-   
-        currentQuestionAndAnswer["order"]= index;
-
-        this.questionsAndAnswers[qNum] = merge(this.questionsAndAnswers[qNum], currentQuestionAndAnswer);
-        this.questionNumber+=1;
+        this.questionsAndAnswers[this.numberOfQuestions] = merge(this.questionsAndAnswers[this.numberOfQuestions], currentQuestionAndAnswer);
+        
+        console.dir(this.questionsAndAnswers);
+        console.log('question number'+this.numberOfQuestions);
         this.question = {};
 
     }
@@ -99,21 +103,77 @@ class TodoStore {
     }
 
     onDeleteQuestion(key){
+
+        var keyNum = parseInt(key);
+        var numRedundant = this.numberOfQuestions - keyNum;
+        this.numberOfQuestions-=1;
         delete this.questionsAndAnswers[key];
+        if(!numRedundant==0){
+
+            for (var i = 0; i < numRedundant; i++){
+                this.questionsAndAnswers[i + keyNum]=this.questionsAndAnswers[i + keyNum + 1];
+                delete this.questionsAndAnswers[i + keyNum + 1];   
+            }
+        }
     }
 
-    onMoveQuestionUp(keyPair){
-        console.log('up');
-        this.questionsAndAnswers[keyPair.thisKey].order = this.questionsAndAnswers[keyPair.thisKey].order -1;
-        this.questionsAndAnswers[keyPair.previousKey].order = this.questionsAndAnswers[keyPair.previousKey].order +1;
+    onMoveQuestionUp(qNum){
+        var thisKey = parseInt(qNum);
+        var thisObj = this.questionsAndAnswers[thisKey];
+
+        this.questionsAndAnswers[thisKey] = this.questionsAndAnswers[thisKey  - 1]
+        this.questionsAndAnswers[thisKey  - 1] = thisObj;
     }
 
-    onMoveQuestionDown(keyPair){
-        console.log('down');
-        this.questionsAndAnswers[keyPair.thisKey].order = this.questionsAndAnswers[keyPair.thisKey].order +1;
-        this.questionsAndAnswers[keyPair.nextKey].order = this.questionsAndAnswers[keyPair.nextKey].order -1;
+    onMoveQuestionDown(qNum){
+        var thisKey = parseInt(qNum);
+        var thisObj = this.questionsAndAnswers[thisKey];
+        this.questionsAndAnswers[thisKey] = this.questionsAndAnswers[thisKey + 1];
+        this.questionsAndAnswers[thisKey  + 1] = thisObj;
+
     }
 
+    onGenerateQuiz(){
+        this.showEditable = false;
+    }
+
+    onChooseAnswer(qA){
+
+        this.questionsAndAnswers[qA.question].answers[qA.answer].chosen = true;
+        console.log("chosen?"+this.questionsAndAnswers[qA.question].answers[qA.answer].chosen);
+    }
+
+    onCheckAnswers(){
+        var totalCorrect=0;
+        for (let key in this.questionsAndAnswers){
+            var previousCorrect = totalCorrect;
+            var correctAnswer = ""
+            var ans = this.questionsAndAnswers[key].answers;
+            for (let key in ans){
+                console.log("answer"+ans[key].correct);
+                if (ans[key].chosen==ans[key].correct && ans[key].chosen)
+                    totalCorrect+=1;
+                else if (ans[key].correct!=ans[key].chosen && ans[key].correct)
+                    console.log("correct is actually "+ans[key].text);
+                    correctAnswer = ans[key].text;
+            }
+            if (previousCorrect==totalCorrect){
+                console.log("bing");
+                this.incorrectAnswers[key] = correctAnswer;
+            }
+        }
+    this.score = totalCorrect;
+
+    console.log("You got "+totalCorrect+" out of "+this.numberOfQuestions);
+    console.log("num incorrect"+Object.keys(this.incorrectAnswers).length);
+    this.finished=true;
+    }
+
+    onTakeQuizAgain(){
+
+    }
+    
+    
 
 
 }

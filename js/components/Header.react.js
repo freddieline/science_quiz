@@ -6,14 +6,20 @@ import AnswersInput from './AnswersInput.react';
 
 class Header extends React.Component {
     render() {
+
+        var toggleShowEditable = this.props.showEditable ? "" : "hide";
+
+
         return (
             <div>
-                <h1>Question</h1>
+                <h1 className={toggleShowEditable} >Question</h1>
                 <QuestionInput
+                    showEditable={this.props.showEditable}
                     onSave={ this.onCreateQuestion } 
                 />
-                <h1>Answers</h1>
+                <h1 className={toggleShowEditable} >Answers</h1>
                 <AnswersInput
+                    showEditable={this.props.showEditable}
                     onSave={ this.onCreateAnswer } 
                 />
 

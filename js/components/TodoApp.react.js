@@ -5,14 +5,19 @@ import TodoStore from '../stores/TodoStore';
 import Header from './Header.react';
 import MainSection from './MainSection.react';
 import SavedSection from './SavedSection.react';
-import Footer from './Footer.react';
+import NewQuestionOptions from './NewQuestionOptions.react';
 
 function getTodoState() {
     return {
         allAnswers: TodoStore.getState().answers,
         correctAnswerProvided: TodoStore.correctAnswerProvided(),
         question: TodoStore.getState().question,
-        savedQuestionsAndAnswers:TodoStore.getState().questionsAndAnswers
+        savedQuestionsAndAnswers:TodoStore.getState().questionsAndAnswers,
+        showEditable:TodoStore.getState().showEditable,
+        finished:TodoStore.getState().finished,
+        score:TodoStore.getState().score,
+        incorrectAnswers:TodoStore.getState().incorrectAnswers
+
     }
 }
 
@@ -33,16 +38,26 @@ class TodoApp extends React.Component {
 
     render() {
 
+        console.log("num incorrect"+Object.keys(this.state.incorrectAnswers).length);
+
         return (
             <div className="container">
-                <Header />
+                <Header showEditable = {this.state.showEditable} />
                 <MainSection answers={this.state.allAnswers } 
-                              question={this.state.question } 
+                              question={this.state.question }
                 />
-                <Footer correctAnswerProvided={this.state.correctAnswerProvided } />
-                <SavedSection qAndAs={this.state.savedQuestionsAndAnswers}
+                <NewQuestionOptions 
+                    correctAnswerProvided={this.state.correctAnswerProvided } 
+                    showEditable = {this.state.showEditable}
+                    />
+                <SavedSection qAndAs={this.state.savedQuestionsAndAnswers} 
+                            showEditable={this.state.showEditable}
+                            finished={this.state.finished}
+                            score={this.state.score}
+                            incorrectAnswers={this.state.incorrectAnswers}
+                />
 
-                 />
+                 
             </div>
         );
     }

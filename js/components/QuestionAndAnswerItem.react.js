@@ -10,51 +10,58 @@ class QuestionAndAnswerItem extends React.Component {
     constructor(props) {
         super(props)
 
-        this.state = {
-            thisKey:this.props.thisKey,
-            nextKey:this.props.nextKey,
-            previousKey:this.props.previousKey
-        }
+         
+            this._moveQuestionUp=this._moveQuestionUp.bind(this);
+            this._moveQuestionDown=this._moveQuestionDown.bind(this);
+            this._deleteQuestion=this._deleteQuestion.bind(this);
         
     }
 
     render() {
 
 
-        console.log("QA This"+this.state.thisKey);
-        console.log("QA previous"+this.state.previousKey);
-        console.log("QA next"+this.state.nextKey);
         let aDisplay=[];        
         var answers  = this.props.qAndA.answers;
-        var questionNumber = this.props.questionIndex+1;
+        const qNum = this.props.qNum;
+        const showE = this.props.showEditable;
         
         for (let key in answers) {
-            aDisplay.push(<AnswerItem key={ key } answer={ answers[key] } />);
+            aDisplay.push(<AnswerItem key={ key } 
+                showEditable={showE}
+                questionNumber= {qNum}
+                answer={ answers[key] } />);
         }
+   
+        var moveUpButtonVisible = (qNum == 1) ? 'hide ' : '';
+        var moveDownButtonVisible = (qNum == this.props.totalNumberQuestions  ) ? 'hide ' : '';
 
-        var moveUpButtonVisible = (this.props.questionIndex == 0) ? 'hide' : '';
-        var moveDownButtonVisible = (this.props.questionIndex == (this.props.totalNumberQuestions-1)  ) ? 'hide' : '';
+
+        var showEditableToggle = this.props.showEditable ?  "" : "hide"
 
         return (
             <div>
                 <li>
-                    {"Question "+questionNumber+": "+this.props.qAndA.question}
+                    {"Question "+this.props.qNum+": "+this.props.qAndA.question}
                 </li>
                 <ul>
                     { aDisplay }
                 </ul>
+
                 <a href="#"
-                    className="btn btn-primary"
+                    className={"btn btn-primary "+showEditableToggle}
+                    qNum={this.props.qNum}
                     onClick={ this._deleteQuestion }
                 >Delete question</a>
 
                 <a href="#"
-                    className={"btn btn-primary "+moveUpButtonVisible}
+                    className={"btn btn-primary "+moveUpButtonVisible+showEditableToggle}
+                    qNum={this.props.qNum}
                     onClick={ this._moveQuestionUp }
                 >Move question up</a>
 
                 <a href="#"
-                    className={"btn btn-primary "+moveDownButtonVisible}
+                    className={"btn btn-primary "+moveDownButtonVisible+showEditableToggle}
+                    qNum={this.props.qNum}
                     onClick={ this._moveQuestionDown }
                 >Move question down</a>
             </div>
@@ -62,25 +69,19 @@ class QuestionAndAnswerItem extends React.Component {
     }
 
     _deleteQuestion(){
-        TodoActions.deleteQuestion(this.state.thisKey);
+
+        TodoActions.deleteQuestion(this.props.qNum);
     }
 
     _moveQuestionUp(){
-
-        var keyPair={
-            thisKey:this.state.thisKey,
-            previousKey:this.state.previousKey
-        }
-        TodoActions.moveQuestionUp(keyPair);
+        console.log("key "+this.props.qNum);
+        TodoActions.moveQuestionUp(this.props.qNum);
     }
 
     _moveQuestionDown(){
 
-        var keyPair={
-            thisKey:this.state.thisKey,
-            nextKey:this.state.nextKey
-        }
-        TodoActions.moveQuestionDown(keyPair);
+        console.log("key "+this.props.qNum);
+        TodoActions.moveQuestionDown(this.props.qNum);
     }
 
 };

@@ -3,15 +3,17 @@ import React from 'react';
 import TodoActions from '../actions/TodoActions';
 import TodoStore from '../stores/TodoStore';
 
-class Footer extends React.Component {
+class NewQuestionOptions extends React.Component {
     constructor(props) {
         super(props);
     }
 
     render() {
-        let allButtons;
 
-            allButtons =
+    
+        let allButtons =
+            this.props.showEditable ?
+
             (<div>
                 <a href="#"
                     className="btn btn-primary"
@@ -27,7 +29,7 @@ class Footer extends React.Component {
                     className="btn btn-primary"
                     onClick={ this._clearAnswers }
                 >Clear answers</a>
-            </div>);
+            </div>) : "" ;
         
 
         return (
@@ -51,4 +53,4 @@ class Footer extends React.Component {
     }
 };
 
-export default Footer;
+export default NewQuestionOptions;

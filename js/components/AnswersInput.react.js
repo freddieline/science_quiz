@@ -9,8 +9,10 @@ class AnswersInput extends React.Component {
     }
 
     render() {
+        var toggleShowEditable = this.props.showEditable ? "" : "hide"
+
         return (
-            <input className="form-control" 
+            <input className={"form-control "+toggleShowEditable}
                 onBlur={ this._save } 
                 onKeyDown={ this._onKeyDown } />
         );

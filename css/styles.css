@@ -1,5 +1,9 @@
 h1 {
   text-align: center;
+  display:block;
+  &.hide{
+    display:none;
+  }
 }
 
 #todos {
@@ -22,6 +26,20 @@ li span {
   margin-right:20px;
   display:inline-block;
 
+  &.hide{
+    display:none;
+  }
+}
+
+.form-control{
+  display:block;
+  &.hide{
+    display:none;
+  }
+}
+
+h2{
+display:block;
   &.hide{
     display:none;
   }

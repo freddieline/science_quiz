@@ -12,7 +12,11 @@ class TodoActions {
             'clearAnswers',
             'deleteQuestion',
             'moveQuestionUp',
-            'moveQuestionDown'
+            'moveQuestionDown',
+            'generateQuiz',
+            'chooseAnswer',
+            'checkAnswers',
+            'takeQuizAgain'
         )
     }
 }
